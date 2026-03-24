@@ -72,7 +72,7 @@ for i, tipo in enumerate(TIPOS):
     precios[tipo] = cols[i].number_input(
         tipo,
         min_value=0.0,
-        value=precios.get(tipo, 0),
+        value=float(precios.get(tipo, 0)),
         step=100.0
     )
 
