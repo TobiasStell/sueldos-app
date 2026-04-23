@@ -105,6 +105,8 @@ if st.button("Guardar precios"):
     guardar_precios(precios)
     st.success("Precios guardados ✅")
 
+horas_totales = 0
+
 # ------------------------
 # CALENDARIO
 # ------------------------
@@ -164,7 +166,8 @@ for semana in cal:
             )
         
             horas_data[fecha]["KDYM"] = kdym
-        
+            horas_totales += kdym
+            
             kdym_val = kdym * precios["KDYM"]
             total += kdym_val
             resumen["KDYM"] += kdym_val
@@ -179,7 +182,8 @@ for semana in cal:
             )
         
             horas_data[fecha]["SJ"] = sj
-        
+            horas_totales += sj
+            
             es_sabado = (i == 5)
             feriado = es_feriado(año, mes, dia)
         
@@ -214,3 +218,4 @@ for tipo in TIPOS:
 
 st.markdown("---")
 st.subheader(f"💵 Total del mes: ${total:,.0f}")
+st.subheader(f"⏱️ Horas trabajadas del mes: {horas_totales:.1f} hs ")
