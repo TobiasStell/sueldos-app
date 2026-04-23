@@ -217,5 +217,5 @@ for tipo in TIPOS:
     st.write(f"{tipo}: ${resumen[tipo]:,.0f}")
 
 st.markdown("---")
-st.subheader(f"💵 Total del mes: ${total:,.0f}")
+st.subheader(f"💵 Ganancia total del mes: ${total:,.0f}")
 st.subheader(f"⏱️ Horas trabajadas del mes: {horas_totales:.1f} hs ")
