@@ -3,6 +3,7 @@ import json
 import os
 import calendar
 from datetime import datetime
+import requests
 
 ARCHIVO_PRECIOS = "precios.json"
 ARCHIVO_HORAS = "horas.json"
