@@ -478,13 +478,19 @@ st.markdown("---")
 st.markdown("### 📋 Detalle del mes")
 
 # Tarjetas por tipo
-cols_res = st.columns(len(TIPOS))
-for i, tipo in enumerate(TIPOS):
-    cols_res[i].markdown(f"""
+total_sj = resumen["SJ_SABADO"] + resumen["SJ_FERIADO"] + resumen["SJ_MOTOR"]
+
+cols_res = st.columns(2)
+cols_res[0].markdown(f"""
 <div class="kine-card" style="border-left-color: #a98fe0;">
-    <div class="kine-card-value" style="font-size:1.4rem;">${resumen[tipo]:,.0f}</div>
-    <div class="kine-card-label">{tipo.replace("_", " ")}</div>
+    <div class="kine-card-value" style="font-size:1.4rem;">${resumen["KDYM"]:,.0f}</div>
+    <div class="kine-card-label">KDYM</div>
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown("<br>", unsafe_allow_html=True)
+cols_res[1].markdown(f"""
+<div class="kine-card" style="border-left-color: #a98fe0;">
+    <div class="kine-card-value" style="font-size:1.4rem;">${total_sj:,.0f}</div>
+    <div class="kine-card-label">SJ</div>
+</div>
+""", unsafe_allow_
