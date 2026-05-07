@@ -199,18 +199,25 @@ def get_sheet():
 def cargar_precios():
     sheet = get_sheet()
     ws = sheet.worksheet("precios")
-    data = ws.get_all_records()
-    if not data:
+    data = ws.get_all_values()
+    if len(data) <= 1:
         return {t: 0 for t in TIPOS}
-    return {row["tipo"]: float(row["valor"]) for row in data}
+    resultado = {}
+    for row in data[1:]:
+        if not row or not row[0]:
+            continue
+        try:
+            resultado[row[0]] = float(row[1]) if row[1] else 0.0
+        except (IndexError, ValueError):
+            continue
+    return resultado
 
 def guardar_precios(precios):
     sheet = get_sheet()
     ws = sheet.worksheet("precios")
+    filas = [["tipo", "valor"]] + [[t, v] for t, v in precios.items()]
     ws.clear()
-    ws.append_row(["tipo", "valor"])
-    for tipo, valor in precios.items():
-        ws.append_row([tipo, valor])
+    ws.update("A1", filas)
 
 def cargar_horas():
     sheet = get_sheet()
@@ -219,8 +226,8 @@ def cargar_horas():
     resultado = {}
     if len(data) <= 1:
         return resultado
-    for row in data[1:]:  # saltea el header
-        if not row or not row[0]:  # ignora filas vacías
+    for row in data[1:]:
+        if not row or not row[0]:
             continue
         fecha = row[0]
         try:
@@ -235,10 +242,11 @@ def cargar_horas():
 def guardar_horas(horas_data):
     sheet = get_sheet()
     ws = sheet.worksheet("horas")
-    ws.clear()
-    ws.append_row(["fecha", "KDYM", "SJ"])
+    filas = [["fecha", "KDYM", "SJ"]]
     for fecha, vals in horas_data.items():
-        ws.append_row([fecha, vals["KDYM"], vals["SJ"]])
+        filas.append([fecha, vals["KDYM"], vals["SJ"]])
+    ws.clear()
+    ws.update("A1", filas)
 
 # ------------------------
 # FERIADOS
