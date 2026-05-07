@@ -250,7 +250,7 @@ TIPOS = ["KDYM", "SJ_SABADO", "SJ_FERIADO", "SJ_MOTOR"]
 # ------------------------
 # UI PRINCIPAL
 # ------------------------
-st.markdown("# 💆‍♀️ KineSueldo")
+st.markdown("# 👩🏻‍⚕️ KineSueldo")
 st.markdown("<p style='color:#8a84a3; margin-top:-12px; margin-bottom:24px;'>Calculadora de sueldo mensual</p>", unsafe_allow_html=True)
 
 # ------------------------
