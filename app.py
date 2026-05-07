@@ -7,7 +7,7 @@ import requests
 import gspread
 from google.oauth2.service_account import Credentials
 
-st.set_page_config(page_title="KineSueldo 💆‍♀️", page_icon="💆‍♀️", layout="wide")
+st.set_page_config(page_title="KineSueldo 👩🏻‍⚕️", page_icon="👩🏻‍⚕️", layout="wide")
 
 # ------------------------
 # CSS PERSONALIZADO
@@ -105,18 +105,20 @@ h2, h3 {
 }
 
 .dia-sabado {
-    background: #eef4ff;
+    background: #d0e4ff;
     border-radius: 12px;
     padding: 8px;
-    box-shadow: 0 1px 6px rgba(80,120,200,0.08);
+    box-shadow: 0 1px 6px rgba(80,120,200,0.15);
+    border-left: 4px solid #5b8dee;
     margin-bottom: 6px;
 }
 
 .dia-feriado {
-    background: #fff0f3;
+    background: #ffd6de;
     border-radius: 12px;
     padding: 8px;
-    box-shadow: 0 1px 6px rgba(200,80,100,0.08);
+    box-shadow: 0 1px 6px rgba(200,80,100,0.15);
+    border-left: 4px solid #e05c7a;
     margin-bottom: 6px;
 }
 
