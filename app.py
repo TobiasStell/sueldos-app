@@ -21,7 +21,7 @@ def get_sheet():
         scopes=SCOPES
     )
     client = gspread.authorize(creds)
-    sheet = client.open_by_key(st.secrets["SHEET_ID"])
+    sheet = client.open_by_key(st.secrets["gcp_service_account"]["SHEET_ID"])
     return sheet
 
 def cargar_precios():
