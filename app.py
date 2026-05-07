@@ -493,4 +493,6 @@ cols_res[1].markdown(f"""
     <div class="kine-card-value" style="font-size:1.4rem;">${total_sj:,.0f}</div>
     <div class="kine-card-label">SJ</div>
 </div>
-""", unsafe_allow_
+""", unsafe_allow_html=True)
+
+st.markdown("<br>", unsafe_allow_html=True)
