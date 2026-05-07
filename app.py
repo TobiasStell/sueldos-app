@@ -186,7 +186,6 @@ SCOPES = [
     "https://www.googleapis.com/auth/drive"
 ]
 
-@st.cache_resource
 def get_sheet():
     creds = Credentials.from_service_account_info(
         st.secrets["gcp_service_account"],
