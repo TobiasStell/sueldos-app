@@ -215,14 +215,21 @@ def guardar_precios(precios):
 def cargar_horas():
     sheet = get_sheet()
     ws = sheet.worksheet("horas")
-    data = ws.get_all_records()
+    data = ws.get_all_values()
     resultado = {}
-    for row in data:
-        fecha = row["fecha"]
-        resultado[fecha] = {
-            "KDYM": float(row["KDYM"]),
-            "SJ": float(row["SJ"])
-        }
+    if len(data) <= 1:
+        return resultado
+    for row in data[1:]:  # saltea el header
+        if not row or not row[0]:  # ignora filas vacías
+            continue
+        fecha = row[0]
+        try:
+            resultado[fecha] = {
+                "KDYM": float(row[1]) if row[1] else 0.0,
+                "SJ": float(row[2]) if row[2] else 0.0
+            }
+        except (IndexError, ValueError):
+            continue
     return resultado
 
 def guardar_horas(horas_data):
