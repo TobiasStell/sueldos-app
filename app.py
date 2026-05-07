@@ -196,6 +196,8 @@ def get_sheet():
     sheet = client.open_by_key(st.secrets["gcp_service_account"]["SHEET_ID"])
     return sheet
 
+TIPOS = ["KDYM", "SJ_SABADO", "SJ_FERIADO", "SJ_MOTOR"]
+
 def cargar_precios():
     sheet = get_sheet()
     ws = sheet.worksheet("precios")
@@ -260,8 +262,6 @@ def obtener_feriados(año):
     data = response.json()
     return {f["fecha"] for f in data}
 
-TIPOS = ["KDYM", "SJ_SABADO", "SJ_FERIADO", "SJ_MOTOR"]
-
 # ------------------------
 # UI PRINCIPAL
 # ------------------------
@@ -284,8 +284,16 @@ FERIADOS = obtener_feriados(año)
 def es_feriado(año, mes, dia):
     return f"{año}-{mes:02d}-{dia:02d}" in FERIADOS
 
-precios = cargar_precios()
-horas_data = cargar_horas()
+# ------------------------
+# CARGAR DATOS (una sola vez por sesión)
+# ------------------------
+if "precios" not in st.session_state:
+    st.session_state.precios = cargar_precios()
+if "horas_data" not in st.session_state:
+    st.session_state.horas_data = cargar_horas()
+
+precios = st.session_state.precios
+horas_data = st.session_state.horas_data
 
 # ------------------------
 # PRECIOS
@@ -301,13 +309,14 @@ for i, tipo in enumerate(TIPOS):
     )
 
 if st.button("Guardar precios"):
+    st.session_state.precios = precios
     guardar_precios(precios)
     st.success("Precios guardados ✅")
 
 st.markdown("---")
 
 # ------------------------
-# CALENDARIO (calcular totales primero para la barra)
+# CALENDARIO (pre-calcular para tarjetas)
 # ------------------------
 cal = calendar.monthcalendar(año, mes)
 dias_del_mes = calendar.monthrange(año, mes)[1]
@@ -316,7 +325,6 @@ total = 0
 horas_totales = 0
 resumen = {t: 0 for t in TIPOS}
 
-# Pre-calcular para la barra de progreso
 total_preview = 0
 horas_preview = 0
 for semana in cal:
@@ -338,31 +346,6 @@ for semana in cal:
         else:
             tipo_sj = "SJ_MOTOR"
         total_preview += sj * precios.get(tipo_sj, 0)
-
-# ------------------------
-# BARRA DE PROGRESO DEL MES
-# ------------------------
-if año == año_actual and mes == mes_actual:
-    progreso = min(dia_actual / dias_del_mes, 1.0)
-    dias_restantes = dias_del_mes - dia_actual
-    porcentaje = int(progreso * 100)
-
-    st.markdown(f"""
-    <div class="progress-container">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-weight:600; color:#4a3f6b; font-size:1rem;">📅 Progreso del mes</span>
-            <span style="font-weight:600; color:#8b73c8;">{porcentaje}% del mes transcurrido</span>
-        </div>
-        <div class="progress-bar-bg">
-            <div class="progress-bar-fill" style="width:{porcentaje}%;"></div>
-        </div>
-        <div class="progress-labels">
-            <span>1 de {calendar.month_name[mes]}</span>
-            <span>Hoy: día {dia_actual} · Faltan {dias_restantes} días</span>
-            <span>{dias_del_mes} de {calendar.month_name[mes]}</span>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
 
 # ------------------------
 # TARJETAS RESUMEN
@@ -390,6 +373,32 @@ with c3:
     <div class="kine-card">
         <div class="kine-card-value">${promedio:,.0f}</div>
         <div class="kine-card-label">📊 Promedio por hora</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("---")
+
+# ------------------------
+# BARRA DE PROGRESO (solo mes actual)
+# ------------------------
+if año == año_actual and mes == mes_actual:
+    progreso = min(dia_actual / dias_del_mes, 1.0)
+    dias_restantes = dias_del_mes - dia_actual
+    porcentaje = int(progreso * 100)
+    st.markdown(f"""
+    <div class="progress-container">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-weight:600; color:#4a3f6b; font-size:1rem;">📅 Progreso del mes</span>
+            <span style="font-weight:600; color:#8b73c8;">{porcentaje}% del mes transcurrido</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width:{porcentaje}%;"></div>
+        </div>
+        <div class="progress-labels">
+            <span>1 de {calendar.month_name[mes]}</span>
+            <span>Hoy: día {dia_actual} · Faltan {dias_restantes} días</span>
+            <span>{dias_del_mes} de {calendar.month_name[mes]}</span>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -459,6 +468,7 @@ for semana in cal:
 # GUARDAR HORAS
 # ------------------------
 if st.button("💾 Guardar horas"):
+    st.session_state.horas_data = horas_data
     guardar_horas(horas_data)
     st.success("Horas guardadas correctamente ✅")
 
