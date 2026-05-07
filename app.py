@@ -477,6 +477,16 @@ if st.button("💾 Guardar horas"):
 st.markdown("---")
 st.markdown("### 📋 Detalle del mes")
 
+# Tarjetas por tipo
 cols_res = st.columns(len(TIPOS))
+iconos = {"KDYM": "🏃", "SJ_SABADO": "📅", "SJ_FERIADO": "🎉", "SJ_MOTOR": "⚙️"}
 for i, tipo in enumerate(TIPOS):
-    cols_res[i].metric(tipo, f"${resumen[tipo]:,.0f}")
+    cols_res[i].markdown(f"""
+<div class="kine-card" style="border-left-color: #a98fe0;">
+    <div style="font-size:1.4rem; margin-bottom:4px;">{iconos.get(tipo, "💊")}</div>
+    <div class="kine-card-value" style="font-size:1.4rem;">${resumen[tipo]:,.0f}</div>
+    <div class="kine-card-label">{tipo.replace("_", " ")}</div>
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown("<br>", unsafe_allow_html=True)
