@@ -475,25 +475,8 @@ if st.button("💾 Guardar horas"):
 # RESULTADOS
 # ------------------------
 st.markdown("---")
-st.markdown("### 📋 Resumen del mes")
+st.markdown("### 📋 Detalle del mes")
 
 cols_res = st.columns(len(TIPOS))
 for i, tipo in enumerate(TIPOS):
     cols_res[i].metric(tipo, f"${resumen[tipo]:,.0f}")
-
-st.markdown("---")
-
-col_tot1, col_tot2 = st.columns(2)
-col_tot1.markdown(f"""
-<div class="kine-card">
-    <div class="kine-card-value">${total:,.0f}</div>
-    <div class="kine-card-label">💵 Ganancia total del mes</div>
-</div>
-""", unsafe_allow_html=True)
-
-col_tot2.markdown(f"""
-<div class="kine-card">
-    <div class="kine-card-value">{horas_totales:.1f} hs</div>
-    <div class="kine-card-label">⏱️ Total horas trabajadas</div>
-</div>
-""", unsafe_allow_html=True)
