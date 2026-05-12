@@ -244,7 +244,7 @@ def guardar_horas(horas_data):
     sheet = get_sheet()
     ws = sheet.worksheet("horas")
     filas = [["fecha", "KDYM", "SJ"]]
-    for fecha, vals in horas_data.items():
+    for fecha, vals in sorted(horas_data.items()):  # <-- sorted() acá
         filas.append([fecha, vals["KDYM"], vals["SJ"]])
     ws.clear()
     ws.update("A1", filas)
