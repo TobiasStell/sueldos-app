@@ -233,8 +233,8 @@ def cargar_horas():
         fecha = row[0]
         try:
             resultado[fecha] = {
-                "KDYM": float(row[1]) if row[1] else 0.0,
-                "SJ": float(row[2]) if row[2] else 0.0
+                "KDYM": float(row[1].replace(",", ".")) if row[1] else 0.0,
+                "SJ": float(row[2].replace(",", ".")) if row[2] else 0.0
             }
         except (IndexError, ValueError):
             continue
