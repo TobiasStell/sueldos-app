@@ -278,6 +278,11 @@ col1, col2, _ = st.columns([1, 1, 3])
 año = col1.selectbox("Año", [año_actual - 1, año_actual, año_actual + 1], index=1)
 mes = col2.number_input("Mes", min_value=1, max_value=12, value=mes_actual)
 
+if st.button("🔄 Recargar datos"):
+    st.session_state.pop("precios", None)
+    st.session_state.pop("horas_data", None)
+    st.rerun()
+
 FERIADOS = obtener_feriados(año)
 
 def es_feriado(año, mes, dia):
